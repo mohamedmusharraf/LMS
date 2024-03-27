@@ -2,7 +2,6 @@
     include_once ("../Layouts/user_header.php");
     include_once ("../../connection/connect.php");
 
-    // Fetch book titles from the add_books table
     $bookQuery = "SELECT book_title FROM add_books";
     $bookResult = mysqli_query($con, $bookQuery);
     $bookTitles = array();
@@ -10,22 +9,18 @@
         $bookTitles[] = $row['book_title'];
     }
 
-    // Function to calculate payment
     function calculatePayment($borrowedDate, $returnDate) {
-        // Calculate the difference in days between borrowed and return dates
         $borrowedDateTime = strtotime($borrowedDate);
         $returnDateTime = strtotime($returnDate);
         $difference = $returnDateTime - $borrowedDateTime;
         $days = round($difference / (60 * 60 * 24));
 
-        // Calculate payment
         $oneDayCost = 10;
         $payment = $days * $oneDayCost;
 
         return $payment;
     }
 
-    // Function to decrease quantity in add_books table
     function decreaseQuantity($bookName) {
         global $con;
         $query = "UPDATE add_books SET number_of_copies = number_of_copies - 1 WHERE book_title = '$bookName'";
@@ -33,19 +28,15 @@
     }
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        // Get data from the form
         $bookName = $_POST['book_name'];
         $userName = $_POST['user_name'];
         $borrowedDate = $_POST['borrowed_date'];
         $returnDate = $_POST['return_date'];
 
-        // Calculate payment
         $payment = calculatePayment($borrowedDate, $returnDate);
 
-        // Decrease quantity in add_books table
         decreaseQuantity($bookName);
 
-        // SQL query to insert data into borrowed_books table with default action value
         $query = "INSERT INTO borrowed_books (book_name, user_name, borrowed_date, return_date, status, action) 
                   VALUES ('$bookName', '$userName', '$borrowedDate', '$returnDate', 'Not Returned', 'Pending')";
 
@@ -109,30 +100,20 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function() {
-        // When the form is submitted
         $('form').submit(function(event) {
-            // Prevent the default form submission
             event.preventDefault();
 
-            // Get form data
             var formData = $(this).serialize();
-
-            // Send AJAX request
             $.ajax({
-                url: '<?php echo $_SERVER['PHP_SELF']; ?>', // URL to submit the form data
+                url: '<?php echo $_SERVER['PHP_SELF']; ?>', 
                 method: 'POST',
-                data: formData, // Form data
+                data: formData, 
                 success: function(response) {
-                    // Display success message or handle response
                     console.log(response);
-                    // Example: If the response is "Record inserted successfully."
-                    // You can display an alert or update the page content accordingly
                     alert(response);
                 },
                 error: function(xhr, status, error) {
-                    // Handle errors
                     console.error("Error:", error);
-                    // Example: Display an error message
                     alert("Error: " + error);
                 }
             });

@@ -16,7 +16,7 @@
 }
 
 .login-container {
-    max-width: 400px;
+    max-width: 300px;
     margin: 50px auto;
     padding: 20px;
     background-color: #fff;
@@ -30,8 +30,7 @@ h2 {
 }
 
 .form-group {
-    margin-bottom: 20px;
-    
+    margin-bottom: 20px;  
 }
 
 label {
@@ -42,15 +41,22 @@ label {
 input[type="text"],
 input[type="email"],
 input[type="file"],
-input[type="password"] {
+input[type="password"]{
     width: 50%;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    margin-top: 10px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+select{
+    width: 50%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-top: 20px;
     margin-bottom: 10px
 }
-
 button {
     width: 100%;
     padding: 10px;
@@ -61,14 +67,17 @@ button {
     cursor: pointer;
     transition: background-color 0.3s;
 }
-
+.btn{
+    width: 200px;
+    height: 30px;
+    background-color: #0056b3;
+}
 button:hover {
     background-color: #0056b3;
 }
 .user_form{
     text-align:center;
-    align-items: center;
-    
+    align-items: center;   
 }
     </style>
 </head>
@@ -90,9 +99,10 @@ button:hover {
             </div>
             <div id="menu1">
                 <ul>
-                    <a href="../Auth/admin_login.php"><li class="fa fa-home">Admin</li></a>
-                    <a href="../Auth/user_login.php"><li class="fa fa-user">Users</li></a>
+                    <a href="../Auth/login.php"><li class="fa fa-home">Home</li></a>
+                    <!-- <a href="../Auth/user_login.php"><li class="fa fa-user">Users</li></a> -->
                     <a href="../registration/register.php"><li class="fa fa-registered">Register</li></a>  
+                    <a href="../guest/all_books.php"><li class="fa fa-glide">Guest</li></a>  
 
                 </ul>
             </div>   

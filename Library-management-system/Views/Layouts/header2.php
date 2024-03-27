@@ -1,8 +1,7 @@
 <?php
-$currentUrl = $_SERVER['SCRIPT_NAME'];
 
-// Extract the last filename from the URL
-$currentFilename = basename($currentUrl);  // e.g., "dashboard.php"
+$currentUrl = $_SERVER['SCRIPT_NAME'];
+$currentFilename = basename($currentUrl); 
 
 ?>
 <!DOCTYPE html>
@@ -150,6 +149,18 @@ $currentFilename = basename($currentUrl);  // e.g., "dashboard.php"
                 <div data-i18n="Analytics">Home</div>
               </a>
             </li>
+            <li class="menu-item bg-dark <?= $currentFilename === "admin_register.php" ? 'active' : '' ?>">
+              <a href="../registration/admin_register.php" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-home-circle"></i>
+                <div data-i18n="Analytics">Admin Registration</div>
+              </a>
+            </li>
+            <li class="menu-item bg-dark <?= $currentFilename === "Admin_Management.php" ? 'active' : '' ?>">
+              <a href="../Admin/Admin_Management.php" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-home-circle"></i>
+                <div data-i18n="Analytics">Admin Management</div>
+              </a>
+            </li>
             <li class="menu-item bg-dark  <?= $currentFilename === "message.php" ? 'active' : '' ?>">
               <a href="../Admin/message.php" class="menu-link">
               <i class="menu-icon fa-solid fa-message"></i>
@@ -164,7 +175,7 @@ $currentFilename = basename($currentUrl);  // e.g., "dashboard.php"
             </li>
             <li class="menu-item bg-dark  <?= $currentFilename === "admin_send_message.php" ? 'active' : '' ?>">
               <a href="../Admin/admin_send_message.php" class="menu-link">
-              <i class="fa-sharp fa-solid fa-message-check"></i>
+              <i class="menu-icon fa fa-paper-plane"></i>
                 <div data-i18n="Analytics">Sending Message</div>
               </a>
             </li>
@@ -218,7 +229,7 @@ $currentFilename = basename($currentUrl);  // e.g., "dashboard.php"
               </a>
             </li>
             <li class="menu-item mt-3 bg-dark">
-              <a href="../Auth/admin_login.php" class="menu-link">
+              <a href="../Auth/login.php" class="menu-link">
               <i class="menu-icon fa-solid fa-right-from-bracket"></i>
                 <div data-i18n="Analytics">Logout</div>
               </a>

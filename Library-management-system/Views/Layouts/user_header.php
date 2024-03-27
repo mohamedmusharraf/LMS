@@ -1,4 +1,5 @@
 <?php
+
 $currentUrl = $_SERVER['SCRIPT_NAME'];
 
 // Extract the last filename from the URL
@@ -148,7 +149,7 @@ $currentFilename = basename($currentUrl);  // e.g., "dashboard.php"
             </li>
             <li class="menu-item bg-dark  <?= $currentFilename === "user_send_message.php" ? 'active' : '' ?>">
               <a href="../users/user_send_message.php" class="menu-link">
-              <i class="menu-icon fa-solid fa-inbox"></i>
+              <i class="menu-icon fa fa-paper-plane"></i>
                 <div data-i18n="Analytics">Sending Message</div>
               </a>
             </li>
@@ -184,7 +185,7 @@ $currentFilename = basename($currentUrl);  // e.g., "dashboard.php"
               </a>
             </li>
             <li class="menu-item mt-3 bg-dark">
-              <a href="../Auth/user_login.php" class="menu-link">
+              <a href="../Auth/login.php" class="menu-link">
               <i class="menu-icon fa-solid fa-right-from-bracket"></i>
                 <div data-i18n="Analytics">Logout</div>
               </a>

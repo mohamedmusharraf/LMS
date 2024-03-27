@@ -20,13 +20,10 @@ include_once("../../connection/connect.php");
                     <textarea id="basic-default-message" name="Description" class="form-control" placeholder="Enter Description..." required></textarea>
                 </div>
                 <?php
-                   // Check if the form is submitted
                    if(isset($_POST['submit'])) {
-                   // Retrieve form data and sanitize it
                    $book_title = mysqli_real_escape_string($con, $_POST['Book_Title']);
                    $description = mysqli_real_escape_string($con, $_POST['Description']);
     
-                   // Insert data into the database
                    $sql = "INSERT INTO `book_recommend` (book_title, description) 
                    VALUES ('$book_title', '$description')";
                    $login_query = mysqli_query($con, $sql);

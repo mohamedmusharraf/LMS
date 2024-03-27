@@ -1,19 +1,16 @@
 <?php 
     include_once ("../Layouts/header2.php");
     include_once ("../../connection/connect.php");
-    require_once '../../helpers/AppManager.php';
    
-    // Query to fetch data from the add_books table
+    
     $query = "SELECT * FROM add_books";
     $result = $con->query($query);
 
-    // Check if the query was successful
     if ($result) {
-        $books = $result->fetch_all(MYSQLI_ASSOC); // Fetch all records as an associative array
+        $books = $result->fetch_all(MYSQLI_ASSOC);
     } else {
-        // Handle the case where the query failed
-        $books = array(); // Initialize an empty array
-        echo "Error: " . $con->error; // Display error message
+        $books = array(); 
+        echo "Error: " . $con->error; 
     }
 ?>
 
@@ -75,7 +72,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <!-- Form to edit book details -->
+            
                 <form id="editBookForm">
                     <input type="hidden" id="editBookId" name="editBookId">
                     <div class="mb-3">
@@ -108,6 +105,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
+    // Get Form Detils
     $(document).ready(function() {
         $(".edit-book").click(function() {
             var bookId = $(this).data("id");
@@ -117,7 +115,7 @@
                 data: { book_id: bookId },
                 dataType: "json",
                 success: function(response) {
-                    // Populate form fields with book details
+            
                     $("#editBookId").val(response.book_id);
                     $("#editBookTitle").val(response.book_title);
                     $("#editBookAuthor").val(response.author);
@@ -134,65 +132,53 @@
         });
 
         $("#editBookForm").submit(function(event) {
-            event.preventDefault(); // Prevent default form submission
-
-            // Get form data
+            event.preventDefault(); 
             var formData = $(this).serialize();
 
-            // Send AJAX request to update database
             $.ajax({
-                url: "../Update_function/update_book.php", // PHP script to handle update
+                url: "../Update_function/update_book.php",
                 method: "POST",
                 data: formData,
                 success: function(response) {
-                    // Handle success (if needed)
                     console.log(response);
-                    // Reload the page or update the table with the new data
                     location.reload();
                 },
                 error: function(xhr, status, error) {
-                    // Handle error (if needed)
                     console.error(xhr.responseText);
                 }
             });
         });
 
+        // Delete Function
         $(".delete-book").click(function() {
             var bookId = $(this).data("id");
-            // Confirm deletion
             if (confirm("Are you sure you want to delete this book?")) {
-                // Send AJAX request to
-                                // Send AJAX request to delete book
                                 $.ajax({
                     url: "../delete_function/delete_book.php",
                     method: "POST",
                     data: { book_id: bookId },
                     success: function(response) {
-                        // Handle success (if needed)
                         console.log(response);
-                        // Reload the page or update the table with the new data
                         location.reload();
                     },
                     error: function(xhr, status, error) {
-                        // Handle error (if needed)
                         console.error(xhr.responseText);
                     }
                 });
             }
         });
+
+        // Search Function
         $("#searchButton").click(function() {
             var searchInput = $("#searchInput").val().trim();
             if (searchInput !== "") {
-                // Send AJAX request to search for books
                 $.ajax({
                     url: "../search_function/search_books.php",
                     method: "POST",
                     data: { search_query: searchInput },
                     dataType: "json",
                     success: function(response) {
-                        // Clear table body
                         $("tbody").empty();
-                        // Populate table with search results
                         $.each(response, function(index, book) {
                             var row = "<tr>" +
                                 "<td>" + (index + 1) + "</td>" +

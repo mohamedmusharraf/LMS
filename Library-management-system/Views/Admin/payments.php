@@ -2,7 +2,6 @@
 include_once ("../Layouts/header2.php");
 include_once ("../../connection/connect.php");
 
-// Query to fetch data from the borrowed_books table where status is 'Returned'
 $query = "SELECT * FROM borrowed_books WHERE status = 'Returned'";
 $result = mysqli_query($con, $query);
 
@@ -35,17 +34,14 @@ $result = mysqli_query($con, $query);
                         </thead>
                         <tbody>
                             <?php 
-                            // Check if there are any rows returned
+                            
                             if (mysqli_num_rows($result) > 0) {
-                                // Fetch rows from the result set
                                 while ($book = mysqli_fetch_assoc($result)) { 
-                                    // Calculate difference in days between borrowed and return dates
                                     $borrowedDate = strtotime($book['borrowed_date']);
                                     $returnDate = strtotime($book['return_date']);
                                     $difference = $returnDate - $borrowedDate;
                                     $days = round($difference / (60 * 60 * 24));
-                                    // Calculate amount
-                                    $amount = $days * 100; // Assuming Rs. 100 per day
+                                    $amount = $days * 100; 
                                     ?>
                                     <tr>
                                         <td><?= $book['id'] ?></td>
@@ -53,7 +49,7 @@ $result = mysqli_query($con, $query);
                                         <td><?= $book['user_name'] ?? ""; ?></td>
                                         <td><?= $book['borrowed_date'] ?? ""; ?></td>
                                         <td><?= $book['return_date'] ?? ""; ?></td>
-                                        <td><?= $amount ?></td> <!-- Display calculated amount -->
+                                        <td><?= $amount ?></td> 
                                         <td><?= $book['action'] ?? ""; ?></td>
                                         <td>
                                             <div>
@@ -76,18 +72,17 @@ $result = mysqli_query($con, $query);
 </div>
 <script>
     $(document).ready(function() {
+        // Update Function
         $('.edit-book').click(function() {
             var returnBookId = $(this).data('id');
-            var actionColumn = $(this).closest('tr').find('td').eq(6); // Assuming action column is the 7th column (index 6)
-            
-            // Send AJAX request to update action to 'Paid'
+            var actionColumn = $(this).closest('tr').find('td').eq(6); 
             $.ajax({
-                url: '../Update_function/update_action.php', // Adjust URL according to your setup
+                url: '../Update_function/update_action.php', 
                 method: 'POST',
                 data: { return_book_id: returnBookId },
                 success: function(response) {
                     if (response === "success") {
-                        actionColumn.text('Paid').css('color', 'green'); // Update action text and color
+                        actionColumn.text('Paid').css('color', 'green'); 
                     } else {
                         alert('Failed to update action.');
                     }
@@ -97,43 +92,34 @@ $result = mysqli_query($con, $query);
                 }
             });
         });
+        // Search Function
         $('#searchForm').submit(function(event) {
-            event.preventDefault(); // Prevent the form from submitting traditionally
-            
-            // Get the search input value
-            var searchValue = $('#searchInput').val();
-            
-            // Send an AJAX request to fetch filtered data
-            $.ajax({
-                url: '../search_function/search_payments.php', // Adjust the URL according to your setup
-                method: 'POST',
-                data: { searchValue: searchValue },
-                dataType: 'json', // Expect JSON response
-                success: function(response) {
-                    // Update table with filtered data
-                    updateTable(response);
-                },
-                error: function(xhr, status, error) {
-                    console.error("Error fetching filtered data:", error);
-                }
-            });
+        event.preventDefault(); 
+        
+        var searchValue = $('#searchInput').val();
+             
+        $.ajax({
+            url: '../search_function/search_payments.php', 
+            method: 'POST',
+            data: { searchValue: searchValue },
+            success: function(response) {
+                $('#userData tbody').html(response);
+            },
+            error: function(xhr, status, error) {
+                console.error("Error fetching filtered data:", error);
+            }
         });
+    });
 
-        // Function to update table with filtered data
         function updateTable(data) {
             var tableBody = $('#userData tbody');
-            tableBody.empty(); // Clear existing table rows
+            tableBody.empty(); 
 
             if(data.length > 0) {
-                // Iterate through filtered data and add rows to the table
                 $.each(data, function(index, book) {
-                    // Similar to your existing code for displaying table rows
-                    // Append rows to the tableBody
-                    // Example:
-                    // tableBody.append('<tr>...</tr>');
+                  
                 });
             } else {
-                // No records found
                 tableBody.append('<tr><td colspan="8">No records found</td></tr>');
             }
         }

@@ -1,44 +1,49 @@
 <?php
-// Include the connection file
 include_once("../../connection/connect.php");
 
-// Check if the request is a POST request
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Retrieve form data
-    $userName = $_POST["createUserName"] ?? "";
-    $userEmail = $_POST["createUserEmail"] ?? "";
-    $userImage = $_POST["createUserImage"] ?? "";
-    $userPassword = $_POST["createUserPassword"] ?? "";
-    $confUserPassword = $_POST["confUserPassword"] ?? "";
-    $userAddress = $_POST["createUserAddress"] ?? "";
-    $userContact = $_POST["createUserContact"] ?? "";
+    $username = $_POST['createUserName'];
+    $email = $_POST['createUserEmail'];
+    $password = $_POST['createUserPassword'];
+    $confirmPassword = $_POST['confUserPassword'];
+    $address = $_POST['createUserAddress'];
+    $contact = $_POST['createUserContact'];
+    $type = $_POST['TYPE'];
 
-    // Validate the form data (You can add more validation logic here)
-    if (empty($userName) || empty($userEmail)) {
-        // Handle validation errors
-        echo "Error: Name and Email are required fields.";
-        exit;
+    if ($password !== $confirmPassword) {
+        echo json_encode(array("error" => "Passwords do not match."));
+        exit();
     }
 
-    // Prepare SQL statement to insert a new user into the database
-    $stmt = $con->prepare("INSERT INTO `user_table` (user_name, user_email, user_image, user_password, user_address, user_contact) VALUES (?, ?, ?, ?, ?, ?)");
+    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-    // Bind parameters to the prepared statement
-    $stmt->bind_param("ssssss", $userName, $userEmail, $userImage, $userPassword, $userAddress, $userContact);
+    $image = "";
+    if ($_FILES['createUserImage']['error'] === UPLOAD_ERR_OK) {
+        $imageDir = "../../views/users/images/";
+        $imageName = uniqid() . "_" . $_FILES['createUserImage']['name'];
+        $targetFile = $imageDir . $imageName;
 
-    // Execute the prepared statement
+        if (move_uploaded_file($_FILES['createUserImage']['tmp_name'], $targetFile)) {
+            $image = $imageName;
+        } else {
+            echo json_encode(array("error" => "Failed to upload image."));
+            exit();
+        }
+    }
+
+    $query = "INSERT INTO user_table (name, email, password, image, address, contact, type) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    $stmt = $con->prepare($query);
+    $stmt->bind_param("sssssss", $username, $email, $hashedPassword, $image, $address, $contact, $type);
+
     if ($stmt->execute()) {
-        // Success message
-        echo "User created successfully.";
+        echo json_encode(array("success" => "User created successfully."));
     } else {
-        // Error message
-        echo "Error: Unable to create user.";
+        echo json_encode(array("error" => "Error creating user: " . $con->error));
     }
 
-    // Close the prepared statement
     $stmt->close();
+    $con->close();
 } else {
-    // Handle non-POST requests
-    echo "Error: Invalid request method.";
+    echo json_encode(array("error" => "Invalid request method."));
 }
 ?>

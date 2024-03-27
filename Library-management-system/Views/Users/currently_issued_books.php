@@ -1,32 +1,26 @@
 <?php 
     include_once ("../Layouts/user_header.php");
     include_once ("../../connection/connect.php");
-
-    // Include database connection file
-    include_once("../../connection/connect.php");
     
-    // Query to fetch data from the borrowed_books table
     $query = "SELECT * FROM borrowed_books";
     $result = mysqli_query($con, $query);
     
-    // Check if there are any rows returned
     if (mysqli_num_rows($result) > 0) {
-        // Initialize an empty array to store borrowed books
         $borrowedBooks = array();
     
-        // Fetch rows from the result set
         while ($row = mysqli_fetch_assoc($result)) {
-            // Add each row to the borrowedBooks array
             $borrowedBooks[] = $row;
         }
     } else {
-        // No borrowed books found
         $borrowedBooks = array();
     }
 ?>
 
-<!-- Display borrowed books data -->
 <div class="container">
+<form class="d-flex m-5 mb-2">
+        <input id="searchInput" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <button id="searchButton" class="btn btn-outline-primary" type="button">Search</button>
+    </form>
     <section class="content m-3">
         <div class="container-fluid">
             <div class="card">
@@ -60,3 +54,27 @@
         </div>
     </section>
 </div>
+<script>
+    $(document).ready(function() {
+        // Search Function
+        $('#searchButton').click(function() {
+            var searchQuery = $('#searchInput').val().toLowerCase();
+
+            $('#userData tbody tr').each(function() {
+                var found = false;
+                $(this).find('td').each(function() {
+                    var cellText = $(this).text().toLowerCase();
+                    if (cellText.indexOf(searchQuery) !== -1) {
+                        found = true;
+                        return false; 
+                    }
+                });
+                if (found) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+        });
+    });
+</script>

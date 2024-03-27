@@ -45,28 +45,38 @@ include_once ("../../connection/connect.php");
                     </div>
                 </div>
                 <?php
-                    if(isset($_POST['submit'])){
-                      // Retrieve form data
-                      $book_title = mysqli_real_escape_string($con, $_POST['Book_Title']);
-                      $author = mysqli_real_escape_string($con, $_POST['Author']);
-                      $publisher = mysqli_real_escape_string($con, $_POST['Publisher']);
-                      $year = mysqli_real_escape_string($con, $_POST['Year']);
-                      $number_of_copies = mysqli_real_escape_string($con, $_POST['Number_of_Copies']);
-                      
-                      $sql = "INSERT INTO `add_books` (book_title, author, publisher, year, number_of_copies) 
-                              VALUES ('$book_title', '$author', '$publisher', '$year', '$number_of_copies')";
-                      $login_query = mysqli_query($con, $sql);
-                      
-                      if($login_query) {
-                          echo "<div class='alert alert-success alert-dismissible' role='alert'>
-                          Book Add Successfully
-                          <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
-                        </div>";
-                      } else {
-                          echo "<script>alert('Error: " . mysqli_error($con) . "')</script>";
-                      }
-                  }
-                ?>
+                    if (isset($_POST['submit'])) {
+                        $book_title = mysqli_real_escape_string($con, $_POST['Book_Title']);
+                        $author = mysqli_real_escape_string($con, $_POST['Author']);
+                        $publisher = mysqli_real_escape_string($con, $_POST['Publisher']);
+                        $year = mysqli_real_escape_string($con, $_POST['Year']);
+                        $number_of_copies = mysqli_real_escape_string($con, $_POST['Number_of_Copies']);
+                    
+                        $check_query = mysqli_query($con, "SELECT * FROM `add_books` WHERE `book_title`='$book_title'");
+                        if (mysqli_num_rows($check_query) > 0) {
+                            echo "<div class='alert alert-danger alert-dismissible' role='alert'>
+                                    Book with this title already exists!
+                                    <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+                                </div>";
+                        } else {
+                            $sql = "INSERT INTO `add_books` (book_title, author, publisher, year, number_of_copies) 
+                                    VALUES ('$book_title', '$author', '$publisher', '$year', '$number_of_copies')";
+                            $login_query = mysqli_query($con, $sql);
+                    
+                            if ($login_query) {
+                                echo "<div class='alert alert-success alert-dismissible' role='alert'>
+                                        Book Added Successfully
+                                        <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+                                    </div>";
+                            } else {
+                                echo "<div class='alert alert-danger alert-dismissible' role='alert'>
+                                        Error: " . mysqli_error($con) . "
+                                        <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+                                    </div>";
+                            }
+                        }
+                    }
+                    ?>
                 <div class="row justify-content-end">
                     <div class="col-sm-10">
                         <button type="submit" name="submit" class="btn btn-primary">Add Book</button>

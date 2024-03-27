@@ -1,26 +1,18 @@
 <?php 
     // Include header file
     include_once("../Layouts/user_header.php");
-    
-    // Include database connection file
     include_once("../../connection/connect.php");
     
-    // Query to fetch data from the user_message table
     $query = "SELECT * FROM user_message";
     $result = mysqli_query($con, $query);
     
-    // Check if there are any rows returned
     if (mysqli_num_rows($result) > 0) {
-        // Initialize an empty array to store messages
         $users = array();
     
-        // Fetch rows from the result set
         while ($row = mysqli_fetch_assoc($result)) {
-            // Add each row to the users array
             $users[] = $row;
         }
     } else {
-        // No messages found
         $users = array();
     }
 ?>
@@ -47,7 +39,6 @@
                         </thead>
                         <tbody>
                             <?php 
-                            // Check if $users is not null and is an array
                             if (!empty($users) && is_array($users)) {
                                 foreach ($users as $key => $c) { 
                             ?>
@@ -79,24 +70,20 @@
 
 
 <script>
+    // Delete Function
      $(document).ready(function() {
         $(".delete-user").click(function() {
             var messageId = $(this).data("id");
-            // Confirm deletion
             if (confirm("Are you sure you want to delete this message?")) {
-                // Send AJAX request to delete message
                 $.ajax({
                     url: "../delete_function/delete_user_sending_message.php",
                     method: "POST",
                     data: { message_id: messageId },
                     success: function(response) {
-                        // Handle success (if needed)
                         console.log(response);
-                        // Reload the page or update the table with the new data
                         location.reload();
                     },
                     error: function(xhr, status, error) {
-                        // Handle error (if needed)
                         console.error(xhr.responseText);
                     }
                 });

@@ -1,79 +1,174 @@
-<?php include_once ("../Layouts/header2.php") ?>
-
-<!-- Content -->
-<div class="container-xxl flex-grow-1 container-p-y">
-  <div class="row">
-    <div class="col-lg-8 mb-4 order-0">
-      <div class="card">
-        <div class="d-flex align-items-end row">
-          <div class="col-sm-7">
-            <div class="card-body">
-              <h5 class="card-title text-primary">Congratulations Admin  🎉</h5>
-              <!-- <a href="javascript:;" class="btn btn-sm btn-outline-primary">View Badges</a> -->
-            </div>
-          </div>
-          <div class="col-sm-5 text-center text-sm-left">
-            <div class="card-body pb-0 px-0 px-md-4">
-              <img src="../../assets/img/illustrations/man-with-laptop-light.png" height="140" alt="View Badge User" data-app-dark-img="illustrations/man-with-laptop-dark.png" data-app-light-img="illustrations/man-with-laptop-light.png" />
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- <div class="col-lg-4 col-md-4 order-1">
-      <div class="row">
-        <div class="col-lg-6 col-md-12 col-6 mb-4">
-          <div class="card">
-            <div class="card-body">
-              <div class="card-title d-flex align-items-start justify-content-between">
-                <div class="avatar flex-shrink-0">
-                  <img src="<?= asset('assets/img/icons/unicons/chart-success.png') ?>" alt="chart success" class="rounded" />
-                </div>
-                <div class="dropdown">
-                  <button class="btn p-0" type="button" id="cardOpt3" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="bx bx-dots-vertical-rounded"></i>
-                  </button>
-                  <div class="dropdown-menu dropdown-menu-end" aria-labelledby="cardOpt3">
-                    <a class="dropdown-item" href="javascript:void(0);">View More</a>
-                    <a class="dropdown-item" href="javascript:void(0);">Delete</a>
-                  </div>
-                </div>
-              </div>
-              <span class="fw-semibold d-block mb-1">Profit</span>
-              <h3 class="card-title mb-2">$12,628</h3>
-              <small class="text-success fw-semibold"><i class="bx bx-up-arrow-alt"></i> +72.80%</small>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-6 col-md-12 col-6 mb-4">
-          <div class="card">
-            <div class="card-body">
-              <div class="card-title d-flex align-items-start justify-content-between">
-                <div class="avatar flex-shrink-0">
-                  <img src="<?= asset('assets/img/icons/unicons/wallet-info.png') ?>" alt="Credit Card" class="rounded" />
-                </div>
-                <div class="dropdown">
-                  <button class="btn p-0" type="button" id="cardOpt6" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="bx bx-dots-vertical-rounded"></i>
-                  </button>
-                  <div class="dropdown-menu dropdown-menu-end" aria-labelledby="cardOpt6">
-                    <a class="dropdown-item" href="javascript:void(0);">View More</a>
-                    <a class="dropdown-item" href="javascript:void(0);">Delete</a>
-                  </div>
-                </div>
-              </div>
-              <span>Sales</span>
-              <h3 class="card-title text-nowrap mb-1">$4,679</h3>
-              <small class="text-success fw-semibold"><i class="bx bx-up-arrow-alt"></i> +28.42%</small>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div> -->
-  </div>
-</div>
-<!-- / Content -->
-
-<?php
-require_once('../layouts/footer.php');
+<?php 
+include_once("../Layouts/header2.php");
+include_once("../../connection/connect.php");
 ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Management System</title>
+    <style>
+.library-news {
+    background-color: #f8f9fa; 
+    padding: 50px 0; 
+}
+
+.library-news .container {
+    text-align: center;
+}
+
+.library-news h2 {
+    margin-bottom: 30px;
+}
+
+.library-news .news {
+    display: flex;
+    justify-content: center;
+}
+
+.library-news .news-item {
+    width: 100%;
+    max-width: 600px;
+    background-color: #fff;
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+}
+
+.library-news .news-item h3 {
+    margin-bottom: 10px;
+    font-size: 1.5em;
+}
+
+.library-news .news-item p {
+    margin-bottom: 20px;
+}
+
+.library-news .news-item .read-more {
+    display: inline-block;
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 3px;
+    transition: background-color 0.3s ease;
+}
+
+.library-news .news-item .read-more:hover {
+    background-color: #0056b3; 
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 500px;
+    top: 100px;
+    width: 50%;
+    height: 80%;
+    background-color: rgba(0,0,0,0.5); 
+    overflow: auto;
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 10% auto; 
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    border-radius: 10px;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+    </style>
+</head>
+<body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library News & Updates</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- Library News/Updates Section -->
+<section class="library-news">
+    <div class="container">
+        <h2>Library News & Updates</h2>
+        <div class="news">
+            <div class="news-item">
+                <h3>Upcoming Events</h3>
+                <ul>
+                    <li>
+                        <h4>Book Club Meeting</h4>
+                        <p>Date: April 10, 2024</p>
+                        <p>Time: 5:00 PM - 6:00 PM</p>
+                        <p>Location: Library Meeting Room</p>
+                        <a href="#" class="read-more">Read More</a>
+                    </li>
+                    <li>
+                        <h4>Author Talk: Jane Doe</h4>
+                        <p>Date: April 15, 2024</p>
+                        <p>Time: 6:30 PM - 7:30 PM</p>
+                        <p>Location: Library Auditorium</p>
+                        <a href="#" class="read-more">Read More</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div id="event-details-modal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Book Club Meeting</h2>
+        <p>Date: April 10, 2024</p>
+        <p>Time: 5:00 PM - 6:00 PM</p>
+        <p>Location: Library Meeting Room</p>
+        <p>Description: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et nisi a nunc ultricies rhoncus.</p>
+    </div>
+</div>
+
+</body>
+</html>
+<script>
+var modal = document.getElementById("event-details-modal");
+
+var span = document.getElementsByClassName("close")[0];
+
+var readMoreButtons = document.querySelectorAll(".read-more");
+readMoreButtons.forEach(function(button) {
+    button.onclick = function() {
+        modal.style.display = "block";
+    }
+});
+
+span.onclick = function() {
+    modal.style.display = "none";
+}
+
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+
+</script>
